@@ -1,10 +1,10 @@
-#include "RaceChrono.h"
+#include "TrackAddict.h"
 
 namespace {
 
-RaceChronoBleCanHandler *handler = nullptr;
+TrackAddictBleCanHandler *handler = nullptr;
 
-void handle_racechrono_filter_request(
+void handle_trackaddict_filter_request(
     uint16_t conn_hdl, BLECharacteristic *chr, uint8_t *data, uint16_t len) {
   if (len < 1) {
     // TODO: figure out how to report errors.
@@ -42,17 +42,17 @@ void handle_racechrono_filter_request(
 
 }  // namespace
 
-RaceChronoBleAgent RaceChronoBle;
+TrackAddictBleAgent TrackAddictBle;
 
-RaceChronoBleAgent::RaceChronoBleAgent() :
+TrackAddictBleAgent::TrackAddictBleAgent() :
   _service(/* uuid= */ 0x00000001000000fd8933990d6f411ff8),
   _pidRequestsCharacteristic(0x02),
   _canBusDataCharacteristic(0x01)
 {
 }
 
-void RaceChronoBleAgent::setUp(
-    const char *bluetoothName, RaceChronoBleCanHandler *handler) {
+void TrackAddictBleAgent::setUp(
+    const char *bluetoothName, TrackAddictBleCanHandler *handler) {
   ::handler = handler;
 
   Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
@@ -63,7 +63,7 @@ void RaceChronoBleAgent::setUp(
 
   _pidRequestsCharacteristic.setProperties(CHR_PROPS_WRITE);
   _pidRequestsCharacteristic.setPermission(SECMODE_NO_ACCESS, SECMODE_OPEN);
-  _pidRequestsCharacteristic.setWriteCallback(handle_racechrono_filter_request);
+  _pidRequestsCharacteristic.setWriteCallback(handle_trackaddict_filter_request);
   _pidRequestsCharacteristic.begin();
 
   _canBusDataCharacteristic.setProperties(CHR_PROPS_NOTIFY | CHR_PROPS_READ);
@@ -73,7 +73,7 @@ void RaceChronoBleAgent::setUp(
   Bluefruit.setTxPower(+4);
 }
 
-void RaceChronoBleAgent::startAdvertising() {
+void TrackAddictBleAgent::startAdvertising() {
   Bluefruit.Advertising.addFlags(BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE);
   Bluefruit.Advertising.addTxPower();
   Bluefruit.Advertising.addService(_service);
@@ -90,7 +90,7 @@ void RaceChronoBleAgent::startAdvertising() {
   Bluefruit.Advertising.start(/* timeout= */ 0);
 }
 
-bool RaceChronoBleAgent::waitForConnection(uint32_t timeoutMs) {
+bool TrackAddictBleAgent::waitForConnection(uint32_t timeoutMs) {
   uint32_t startTimeMs = millis();
   while (!Bluefruit.connected()) {
     if (millis() - startTimeMs >= timeoutMs) {
@@ -102,11 +102,11 @@ bool RaceChronoBleAgent::waitForConnection(uint32_t timeoutMs) {
   return true;
 }
 
-bool RaceChronoBleAgent::isConnected() const {
+bool TrackAddictBleAgent::isConnected() const {
   return Bluefruit.connected();
 }
 
-void RaceChronoBleAgent::sendCanData(
+void TrackAddictBleAgent::sendCanData(
     uint32_t pid, const uint8_t *data, uint8_t len) {
   if (len > 8) {
     len = 8;

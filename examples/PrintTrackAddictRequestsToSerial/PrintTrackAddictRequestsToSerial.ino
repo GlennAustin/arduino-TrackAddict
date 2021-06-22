@@ -1,6 +1,6 @@
-#include <RaceChrono.h>
+#include <TrackAddict.h>
 
-class PrintRaceChronoCommands : public RaceChronoBleCanHandler {
+class PrintTrackAddictCommands : public TrackAddictBleCanHandler {
 public:
   void allowAllPids(uint16_t updateIntervalMs) {
     Serial.print("ALLOW ALL PIDS, update interval: ");
@@ -21,7 +21,7 @@ public:
     Serial.print(updateIntervalMs);
     Serial.println(" ms.");
   }
-} raceChronoHandler;
+} trackAddictHandler;
 
 // Forward declaration to help put code in a natural reading order.
 void waitForConnection();
@@ -33,8 +33,8 @@ void setup() {
   }
 
   Serial.println("Setting up BLE...");
-  RaceChronoBle.setUp("BLE CAN device demo", &raceChronoHandler);
-  RaceChronoBle.startAdvertising();
+  TrackAddictBle.setUp("BLE CAN device demo", &trackAddictHandler);
+  TrackAddictBle.startAdvertising();
 
   Serial.println("BLE is set up, waiting for an incoming connection.");
   waitForConnection();
@@ -43,7 +43,7 @@ void setup() {
 void waitForConnection() {
   uint32_t iteration = 0;
   bool lastPrintHadNewline = false;
-  while (!RaceChronoBle.waitForConnection(1000)) {
+  while (!TrackAddictBle.waitForConnection(1000)) {
     Serial.print(".");
     if ((++iteration) % 10 == 0) {
       lastPrintHadNewline = true;
@@ -61,8 +61,8 @@ void waitForConnection() {
 }
 
 void loop() {
-  if (!RaceChronoBle.isConnected()) {
-    Serial.println("RaceChrono disconnected! Waiting for a new connection.");
+  if (!TrackAddictBle.isConnected()) {
+    Serial.println("TrackAddict disconnected! Waiting for a new connection.");
     waitForConnection();
   }
 }

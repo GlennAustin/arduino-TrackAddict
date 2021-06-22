@@ -1,5 +1,5 @@
-# Arduino RaceChrono
-Library for Arduino for communicating with the RaceChrono app.
+# Arduino TrackAddict
+Library for Arduino for communicating with the TrackAddict app.
 
 ## Supported Hardware
 
@@ -12,12 +12,12 @@ Library for Arduino for communicating with the RaceChrono app.
 
 ```sh
 cd ~/Documents/Arduino/libraries/  # ~/Arduino/libraries on Mac OS
-git clone https://github.com/timurrrr/arduino-RaceChrono.git arduino-RaceChrono
+git clone https://github.com/GlennAustin/arduino-TrackAddict.git arduino-TrackAddict
 ```
 
 ## API
 
-For now, see the source code, specifically the [RaceChrono.h](src/RaceChrono.h)
+For now, see the source code, specifically the [TrackAddict.h](src/TrackAddict.h)
 file. The code should have clarifying comments wherever there are any unclear
 bits.
 

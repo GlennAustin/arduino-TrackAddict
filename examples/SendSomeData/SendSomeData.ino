@@ -1,11 +1,11 @@
-#include <RaceChrono.h>
+#include <TrackAddict.h>
 
 // We're ignoring the requested PIDs and notify intervals here for simplicity.
-class IgnoreRaceChronoCommands : public RaceChronoBleCanHandler {
+class IgnoreTrackAddictCommands : public TrackAddictBleCanHandler {
   void allowAllPids(uint16_t updateIntervalMs) {}
   void denyAllPids() {}
   void allowPid(uint32_t pid, uint16_t updateIntervalMs) {}
-} raceChronoHandler;
+} trackAddictHandler;
 
 // Forward declaration to help put code in a natural reading order.
 void waitForConnection();
@@ -17,8 +17,8 @@ void setup() {
   }
 
   Serial.println("Setting up BLE...");
-  RaceChronoBle.setUp("BLE CAN device demo", &raceChronoHandler);
-  RaceChronoBle.startAdvertising();
+  TrackAddictBle.setUp("BLE CAN device demo", &trackAddictHandler);
+  TrackAddictBle.startAdvertising();
 
   Serial.println("BLE is set up, waiting for an incoming connection.");
   waitForConnection();
@@ -27,7 +27,7 @@ void setup() {
 void waitForConnection() {
   uint32_t iteration = 0;
   bool lastLineHadNewline = false;
-  while (!RaceChronoBle.waitForConnection(1000)) {
+  while (!TrackAddictBle.waitForConnection(1000)) {
     Serial.print(".");
     if ((++iteration) % 10 == 0) {
       lastLineHadNewline = true;
@@ -45,8 +45,8 @@ void waitForConnection() {
 }
 
 void loop() {
-  if (!RaceChronoBle.isConnected()) {
-    Serial.println("RaceChrono disconnected! Waiting for a new connection.");
+  if (!TrackAddictBle.isConnected()) {
+    Serial.println("TrackAddict disconnected! Waiting for a new connection.");
     waitForConnection();
   }
 
@@ -54,6 +54,6 @@ void loop() {
     // For this simple demo, just sent PID repeated 8 times as data.
     uint8_t data[8] = { pid, pid, pid, pid, pid, pid, pid, pid };
     uint8_t len = 8;
-    RaceChronoBle.sendCanData(pid, data, len);
+    TrackAddictBle.sendCanData(pid, data, len);
   }
 }

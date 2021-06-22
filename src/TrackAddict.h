@@ -1,25 +1,25 @@
-#ifndef __RACECHRONO_H
-#define __RACECHRONO_H
+#ifndef __TRACKADDICT_H
+#define __TRACKADDICT_H
 
 #include <bluefruit.h>
 
-#include "RaceChronoPidMap.h"
+#include "TrackAddictPidMap.h"
 
-class RaceChronoBleCanHandler {
+class TrackAddictBleCanHandler {
 public:
-  virtual ~RaceChronoBleCanHandler() {}
+  virtual ~TrackAddictBleCanHandler() {}
 
   virtual void allowAllPids(uint16_t updateIntervalMs);
   virtual void denyAllPids();
   virtual void allowPid(uint32_t pid, uint16_t updateIntervalMs);
 };
 
-class RaceChronoBleAgent {
+class TrackAddictBleAgent {
 public:
-  RaceChronoBleAgent();
+  TrackAddictBleAgent();
 
   // Seems like the length limit for 'bluetoothName' is 19 visible characters.
-  void setUp(const char *bluetoothName, RaceChronoBleCanHandler *handler);
+  void setUp(const char *bluetoothName, TrackAddictBleCanHandler *handler);
 
   void startAdvertising();
 
@@ -31,21 +31,18 @@ public:
   void sendCanData(uint32_t pid, const uint8_t *data, uint8_t len);
 
 private:
-  // The protocol implemented in this file is based on
-  // https://github.com/aollin/racechrono-ble-diy-device
-
   // BLEService docs: https://learn.adafruit.com/bluefruit-nrf52-feather-learning-guide/bleservice
   // BLECharacteristic docs: https://learn.adafruit.com/bluefruit-nrf52-feather-learning-guide/blecharacteristic
 
   BLEService _service;
 
-  // RaceChrono uses two BLE characteristics:
+  // TrackAddict uses two BLE characteristics:
   // 1) 0x02 to request which PIDs to send, and how frequently
   // 2) 0x01 to be notified of data received for those PIDs
   BLECharacteristic _pidRequestsCharacteristic;
   BLECharacteristic _canBusDataCharacteristic;
 };
 
-extern RaceChronoBleAgent RaceChronoBle;
+extern TrackAddictBleAgent TrackAddictBle;
 
-#endif  // __RACECHRONO_H
+#endif  // __TRACKADDICT_H

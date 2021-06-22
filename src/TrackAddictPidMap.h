@@ -1,5 +1,5 @@
-#ifndef __RACECHRONO_PID_MAP_H
-#define __RACECHRONO_PID_MAP_H
+#ifndef __TRACKADDICT_PID_MAP_H
+#define __TRACKADDICT_PID_MAP_H
 
 #include <algorithm>
 
@@ -14,7 +14,7 @@
 // and the runtime for insertions in negligible, given that it should only be
 // done once per session.
 template<typename ExtraType, uint16_t MaxNumPids = 128>
-class RaceChronoPidMap {
+class TrackAddictPidMap {
 public:
   void reset() {
     numEntries = 0;
@@ -179,4 +179,4 @@ private:
   }
 };
 
-#endif  // __RACECHRONO_PID_MAP_H
+#endif  // __TRACKADDICT_PID_MAP_H
